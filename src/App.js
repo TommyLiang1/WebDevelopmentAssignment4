@@ -81,8 +81,8 @@ class App extends Component {
 
   addCredits = (event) => {
     // if empty, don't do anything and return
-    if(this.state.creditsArray.indexOf(event.target.description.value) !== -1)
-      return;
+    // if(this.state.creditsArray.indexOf(event.target.description.value) !== -1)
+    //   return;
     if(event.target.description.value === "" || event.target.amount.value === ""){
       return;
     }
