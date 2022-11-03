@@ -24,7 +24,9 @@ class App extends Component {
       currentUser: {
         userName: 'Joe Smith',
         memberSince: '11/22/99',
-      }
+      },
+      CreditsArray:[],
+      DebitsArray:[]
     }
   }
 
