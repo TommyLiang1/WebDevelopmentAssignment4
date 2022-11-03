@@ -6,6 +6,7 @@ It contains the top-level state.
 ==================================================*/
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
+import axios from "axios"
 
 // Import other components
 import Home from './components/Home';
