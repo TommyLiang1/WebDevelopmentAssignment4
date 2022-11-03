@@ -26,8 +26,23 @@ class App extends Component {
         memberSince: '11/22/99',
       },
       CreditsArray:[],
-      DebitsArray:[]
+      DebitsArray:[],
     }
+  }
+
+  //checks heroku for both debit and credit
+  async componentDidMount() {
+    // setting the API link to a variable
+    let creditAPI = 'https://moj-api.herokuapp.com/credits'
+    let debitAPI = 'https://moj-api.herokuapp.com/debits';
+    
+    //setting a variable to the API response to the link
+    let credit = await axios.get(creditAPI)
+    let debit = await axios.get(debitAPI);
+    
+    //sets the array of items on the linked page
+    this.setState({CreditsArray: credit.data})
+    this.setState({DebitsArray: debit.data})
   }
 
   // Update state's currentUser (userName) after "Log In" button is clicked
@@ -37,6 +52,8 @@ class App extends Component {
     this.setState({currentUser: newUser})
   }
 
+
+  
   // Create Routes and React elements to be rendered using React components
   render() {  
     // Create React elements and pass input props to components
