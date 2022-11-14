@@ -79,6 +79,21 @@ class App extends Component {
    }
   }
 
+  addCredits = (event) => {
+    // if empty, don't do anything and return
+    // if(this.state.creditsArray.indexOf(event.target.description.value) !== -1)
+    //   return;
+    if(event.target.description.value === "" || event.target.amount.value === ""){
+      return;
+    }
+    this.setState((prevState) => ({
+      // add to account balance as credit is positive
+      accountBalance: (Number(this.state.accountBalance) + Number(event.target.amount.value)).toFixed(2),
+      // show in the credits array along with the previous credit records
+      creditsArray: [...prevState.creditsArray, {amount : event.target.amount.value, description: event.target.description.value, date: Time}],
+    }))
+  }
+
 
   // Create Routes and React elements to be rendered using React components
   render() {  
@@ -92,6 +107,8 @@ class App extends Component {
     // Debit component will state the account balance on the page alongside being able to add debit and display the array
     const DebitsComponent = () => (<Debits accountBalance = {this.state.accountBalance} debitsArray = {this.state.debitsArray} addDebits = {this.addDebits} />); 
 
+    // Credit component will state the account balance on the page alongside being able to add ceredit and display the array
+    const CreditsComponent = () => (<Credits accountBalance = {this.state.accountBalance} creditsArray = {this.state.creditsArray} addCredits = {this.addCredits} />);
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
     return(
@@ -100,7 +117,7 @@ class App extends Component {
           <Route exact path="/" render={HomeComponent}/>
           <Route exact path="/userProfile" render={UserProfileComponent}/>
           <Route exact path="/login" render={LogInComponent}/>
-          <Route exact path="/credits" render={Credits}/>
+          <Route exact path="/credits" render={CreditsComponent}/>
           <Route exact path="/debits" render={DebitsComponent}/>
         </div>
       </Router>

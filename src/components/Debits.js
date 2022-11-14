@@ -32,19 +32,19 @@ class Debits extends Component {
     var Year = currentDate.getUTCFullYear();
     var Time = Year + '-' + Month + '-' + Day;
 
-   // if description and amount boxes are empty there is nothing to add so return
-   if (event.target.description.value === "" || event.target.amount.value === ""){
-    return;
+    // if description and amount boxes are empty there is nothing to add so return
+    if (event.target.description.value === "" || event.target.amount.value === ""){
+      return;
+    }
+    else{
+      this.setState((prevState) => ({ 
+        // states the balance to the nearest 2 digits
+        accountBalance: (this.state.accountBalance - event.target.amount.value).toFixed(2), 
+        // triple dot copies the contents of the debitArray
+        debitsArray: [...prevState.debitsArray, {amount: event.target.amount.value, description: event.target.description.value, date: Time}],
+      }))
+    }
   }
-  else{
-    this.setState((prevState) => ({ 
-      // states the balance to the nearest 2 digits
-      accountBalance: (this.state.accountBalance - event.target.amount.value).toFixed(2), 
-      // triple dot copies the contents of the debitArray
-      debitsArray: [...prevState.debitsArray, {amount: event.target.amount.value, description: event.target.description.value, date: Time}],
-  }))
- }
-}
 
 
   render() {
@@ -63,8 +63,8 @@ class Debits extends Component {
         <button type="submit">Add Debit</button>
       </form>
       <Link to="/">Return to Home</Link>
-      <br></br>
-      <Link to="/credit">Credits</Link>
+      <br /><br />
+      <Link to="/credits">Credits</Link>
     </div>
     );
   }
