@@ -65,7 +65,7 @@ class App extends Component {
     const userName = logInInfo
     let bool = false;
     for(let i =0; i < this.state.all_users.length ; i++){
-      if(userName === this.state.all_users[i].userName){ //if the name is there
+      if(userName === this.state.all_users[i].userName){ //if this user already exists 
         bool = true
         this.setState({currentUser : i})
       }
