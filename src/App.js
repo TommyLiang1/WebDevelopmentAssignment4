@@ -18,9 +18,9 @@ import Debits from './components/Debits';
 //globally calling time once instead of calling it twice for both debit and credit
 var currentDate = new Date();
 var Month = currentDate.getUTCMonth() + 1;
-var Day = currentDate.getUTCDay();
+var Day = currentDate.getDate();
 var Year = currentDate.getUTCFullYear();
-var Time =  Day + '/' + Month + '/' + Year ;
+var Time =  Month + '/' + Day  +  '/' + Year ;
 
 class App extends Component {
   constructor() {  // Create and initialize state
@@ -73,9 +73,9 @@ class App extends Component {
     if(!bool){ //if its a new user
       var currentDate = new Date();
       var Month = currentDate.getUTCMonth() + 1;
-      var Day = currentDate.getUTCDay();
+      var Day = currentDate.getDate();
       var Year = currentDate.getUTCFullYear();
-      var Time =  Day + '/' + Month + '/' + Year ;
+      var Time =  Month + '/' + Day  +  '/' + Year ;
 
       let shallowState = this.state.all_users
       shallowState.push({
