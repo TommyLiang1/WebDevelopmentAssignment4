@@ -20,36 +20,6 @@ class LogIn extends Component {
   handleChange = (e) => {
     const userName = e.target.value 
     this.setState({username: userName})
-    // let bool = false;
-    // console.log(this.state.all_users)
-    // for(let i =0; i < this.state.all_users.length ; i++){
-    //   if(userName === this.state.all_users[i].userName){ //if the name is there
-    //     bool = true
-    //     this.setState({currentUser : i})
-    //   }
-    // }
-    // if(!bool){ //if its a new user
-    //   var currentDate = new Date();
-    //   var Month = currentDate.getUTCMonth() + 1;
-    //   var Day = currentDate.getUTCDay();
-    //   var Year = currentDate.getUTCFullYear();
-    //   var Time = Year + '-' + Month + '-' + Day;
-
-    //   let shallowState = this.state.all_users
-    //   shallowState.push({
-    //     userName: userName,
-    //     memberSince: Time,
-    //     accountBalance: 0,
-    //     creditsArray: [],
-    //     debitsArray: []
-    //   })
-    //   this.setState( {all_users : shallowState})
-    //   this.setState({currentUser : shallowState.length -1})
-    // }
-
-    // const updatedUser = {...this.state.user}  // Create an object for state
-    // updatedUser.userName = e.target.value  // Set object's userName to the new input value
-    // this.setState({user: updatedUser})  // Update state with object values
   }
 
   // When user clicked "Log In" button, store user data and then redirect to "User Profile" page
