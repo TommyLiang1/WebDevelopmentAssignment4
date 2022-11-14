@@ -20,21 +20,20 @@ var currentDate = new Date();
 var Month = currentDate.getUTCMonth() + 1;
 var Day = currentDate.getUTCDay();
 var Year = currentDate.getUTCFullYear();
-var Time = Year + '-' + Month + '-' + Day;
+var Time =  Day + '/' + Month + '/' + Year ;
 
 class App extends Component {
   constructor() {  // Create and initialize state
     super();
-    this.state = {} //making each user have their own array so they have their own balance
-    //   1,//first num will be index of current user
-    //   {
-    //     userName: 'Joe Smith',
-    //     memberSince: '11/22/99',
-    //     accountBalance: 1234567.89,
-    //     creditsArray: [],
-    //     debitsArray: []
-    //   }
-    // ]
+    this.state = {
+      currentUser:0,//first num will be index of current user
+      all_users: [
+        {userName: 'Joe Smith',
+        memberSince: '11/22/99',
+        accountBalance: 0,
+        creditsArray: [],
+        debitsArray: []}
+      ]} //making each user have their own array so they have their own balance
   }
 
   //checks heroku for both debit and credit (Populates the pages with the preexisting items purchased)
@@ -50,9 +49,9 @@ class App extends Component {
     //sets the array of items on the linked page to the data
     this.setState({
       currentUser:0,//first num will be index of current user
-      all_Users: [
+      all_users: [
         {userName: 'Joe Smith',
-        memberSince: '11/22/99',
+        memberSince: '11/22/1999',
         accountBalance: 1234567.89,
         creditsArray: credit.data,
         debitsArray: debit.data}
@@ -61,25 +60,35 @@ class App extends Component {
 
   // Update state's currentUser (userName) after "Log In" button is clicked
   mockLogIn = (logInInfo) => {
-    const newUser = { ...this.state.currentUser }
-    newUser.userName = logInInfo.userName
-    
-    var currentDate = new Date();
-    var Month = currentDate.getUTCMonth() + 1;
-    var Day = currentDate.getUTCDay();
-    var Year = currentDate.getUTCFullYear();
-    var Time = Year + '-' + Month + '-' + Day;
+    // const newUser = { ...this.state.currentUser }
+    // newUser.userName = logInInfo.userName
+    const userName = logInInfo
+    let bool = false;
+    for(let i =0; i < this.state.all_users.length ; i++){
+      if(userName === this.state.all_users[i].userName){ //if the name is there
+        bool = true
+        this.setState({currentUser : i})
+      }
+    }
+    if(!bool){ //if its a new user
+      var currentDate = new Date();
+      var Month = currentDate.getUTCMonth() + 1;
+      var Day = currentDate.getUTCDay();
+      var Year = currentDate.getUTCFullYear();
+      var Time =  Day + '/' + Month + '/' + Year ;
 
-    let shallowState = [...this.state]
-    shallowState.push({
-      userName: newUser.userName,
-      memberSince: Time,
-      accountBalance: 0,
-      creditsArray: [],
-      debitsArray: []
-    })
-    shallowState[0] = shallowState.length()-1
-    this.setState(shallowState)
+      let shallowState = this.state.all_users
+      shallowState.push({
+        userName: userName,
+        memberSince: Time,
+        accountBalance: 0,
+        creditsArray: [],
+        debitsArray: []
+      })
+      this.setState( {all_users : shallowState})
+      this.setState({currentUser : shallowState.length -1})
+    }
+
   }
   //HERE ...prevState.creditsArray, { amount: event.target.amount.value, description: event.target.description.value, date: Time }
   // helper function alongside addDebit in Debits.js to add Debits
@@ -89,47 +98,45 @@ class App extends Component {
     if (event.target.description.value === "" || event.target.amount.value === "") {
       return;
     }
-    else {
-      // let shallowState = []
-      this.setState((prevState) => ({
-        // states the balance to the nearest 2 digits as requested
-        accountBalance: (this.state.accountBalance - event.target.amount.value).toFixed(2),
-        // triple dot copies the contents of the debitArray
-        debitsArray: [...prevState.debitsArray, { amount: event.target.amount.value, description: event.target.description.value, date: Time }],
-      }))
-    }
+    let shallowStateUsers = this.state.all_users
+    let currentUser =  shallowStateUsers[this.state.currentUser]
+    currentUser.accountBalance = (Number(currentUser.accountBalance) - Number(event.target.amount.value)).toFixed(2)
+    currentUser.debitsArray.push({ amount: event.target.amount.value, description: event.target.description.value, date: Time })
+    shallowStateUsers[this.state.currentUser] = currentUser
+    
+    this.setState({all_users : shallowStateUsers}) 
   }
 
   addCredits = (event) => {
     // if empty, don't do anything and return
-    // if(this.state.creditsArray.indexOf(event.target.description.value) !== -1)
-    //   return;
     if (event.target.description.value === "" || event.target.amount.value === "") {
       return;
     }
-    this.setState((prevState) => ({
-      // add to account balance as credit is positive
-      accountBalance: (Number(this.state.accountBalance) + Number(event.target.amount.value)).toFixed(2),
-      // show in the credits array along with the previous credit records
-      creditsArray: [...prevState.creditsArray, { amount: event.target.amount.value, description: event.target.description.value, date: Time }],
-    }))
+    let shallowStateUsers = this.state.all_users
+    let currentUser =  shallowStateUsers[this.state.currentUser]
+    currentUser.accountBalance = (Number(currentUser.accountBalance) + Number(event.target.amount.value)).toFixed(2)
+    currentUser.creditsArray.push({ amount: event.target.amount.value, description: event.target.description.value, date: Time })
+    shallowStateUsers[this.state.currentUser] = currentUser
+    this.setState({all_users : shallowStateUsers}) 
   }
 
 
   // Create Routes and React elements to be rendered using React components
   render() {
     // Create React elements and pass input props to components
-    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} />);
+    const HomeComponent = () => (<Home accountBalance={this.state.all_users[this.state.currentUser].accountBalance} />);
     const UserProfileComponent = () => (
-      <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
+       //this.state.all_users[this.state.currentUser].userName
+      <UserProfile userProfile={this.state.all_users[this.state.currentUser]} memberSince={this.state.currentUser.memberSince} />
     );
-    const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
-
+    console.log(this.state.all_users)
+    // const LogInComponent = () => (<LogIn user={this.state.all_users[this.state.currentUser]} mockLogIn={this.mockLogIn} />)
+    const LogInComponent = () => (<LogIn info={this.state} mockLogIn={this.mockLogIn} />)
     // Debit component will state the account balance on the page alongside being able to add debit and display the array
-    const DebitsComponent = () => (<Debits accountBalance={this.state.accountBalance} debitsArray={this.state.debitsArray} addDebits={this.addDebits} />);
+    const DebitsComponent = () => (<Debits accountBalance={this.state.all_users[this.state.currentUser].accountBalance} debitsArray={this.state.all_users[this.state.currentUser].debitsArray} addDebits={this.addDebits} />);
 
     // Credit component will state the account balance on the page alongside being able to add ceredit and display the array
-    const CreditsComponent = () => (<Credits accountBalance={this.state.accountBalance} creditsArray={this.state.creditsArray} addCredits={this.addCredits} />);
+    const CreditsComponent = () => (<Credits accountBalance={this.state.all_users[this.state.currentUser].accountBalance} creditsArray={this.state.all_users[this.state.currentUser].creditsArray} addCredits={this.addCredits} />);
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
     return (
