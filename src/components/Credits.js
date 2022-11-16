@@ -16,6 +16,7 @@ class Credits extends Component {
     };
   }
 
+
   creditView = () => {
     const listofCredits = this.props.creditsArray.map((item) =>
       <li style={{listStylePosition: "inside"}} key={item.description}>{item.description}, ${item.amount}, {item.date.slice(0,10)}</li>
