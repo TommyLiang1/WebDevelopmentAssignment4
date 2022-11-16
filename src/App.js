@@ -114,8 +114,8 @@ class App extends Component {
     }
     let shallowStateUsers = this.state.all_users
     let currentUser =  shallowStateUsers[this.state.currentUser]
-    currentUser.accountBalance = (Number(currentUser.accountBalance) + Number(event.target.amount.value)).toFixed(2)
-    currentUser.creditsArray.push({ amount: event.target.amount.value, description: event.target.description.value, date: Time })
+    currentUser.accountBalance = (Number(currentUser.accountBalance) + Number(event.target.amount.valueAsNumber)).toFixed(2)
+    currentUser.creditsArray.push({ amount: event.target.amount.valueAsNumber, description: event.target.description.value, date: Time })
     shallowStateUsers[this.state.currentUser] = currentUser
     this.setState({all_users : shallowStateUsers}) 
   }
