@@ -11,27 +11,21 @@ import {Link} from 'react-router-dom';
 class LogIn extends Component {
   constructor (props) {  // Create and initialize state
     super(props)
-    this.state = {
-      user: {
-        //userName: '',
-        userName: this.props.user.userName,  // Initialize userName using props input (currentUser in App.js)
-        password: ''
-      },
-      redirect: false  // Redirect property used to trigger Redirect
-    }
+    this.state =  {username : this.props.info.all_users[this.props.info.currentUser].userName}
+    // this.props.info
+      // redirect: false  // Redirect property used to trigger Redirect
   }
 
   // When User Name input is changed, capture the new input value and update state
   handleChange = (e) => {
-    const updatedUser = {...this.state.user}  // Create an object for state
-    updatedUser.userName = e.target.value  // Set object's userName to the new input value
-    this.setState({user: updatedUser})  // Update state with object values
+    const userName = e.target.value 
+    this.setState({username: userName})
   }
 
   // When user clicked "Log In" button, store user data and then redirect to "User Profile" page
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.mockLogIn(this.state.user)  // Update state in the top-level component (App.js)
+    this.props.mockLogIn(this.state.username)  // Update state in the top-level component (App.js)
     this.setState({redirect: true})  // Update state to trigger Redirect
   }
   
@@ -49,7 +43,7 @@ class LogIn extends Component {
         <form onSubmit={this.handleSubmit}>
           <div>
             <label>User Name</label>
-            <input type="text" name="userName" defaultValue={this.props.user.userName} onChange={this.handleChange} />
+            <input type="text" name="userName" defaultValue={this.state.username} onChange={this.handleChange} />
           </div>
           <div>
             <label>Password</label>
